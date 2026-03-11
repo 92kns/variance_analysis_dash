@@ -1,0 +1,232 @@
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --red: #f85149;
+  --panel-width: 440px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+header h1 {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.controls select,
+.controls input,
+.controls button {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.controls select { min-width: 140px; max-width: 220px; }
+.controls input[type="number"] { width: 60px; }
+
+.controls button {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 5px 14px;
+}
+.controls button:hover { opacity: 0.9; }
+.controls button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.progress-bar {
+  height: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+.progress-bar .fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.2s;
+}
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 2px 20px;
+  height: 18px;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.heatmap-container {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+.heatmap-container .empty-state {
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 80px;
+  font-size: 14px;
+}
+
+.heatmap-table {
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.heatmap-table th {
+  padding: 6px 10px;
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 1;
+}
+.heatmap-table th.suite-header {
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  vertical-align: bottom;
+  padding: 10px 4px;
+  max-width: 36px;
+  font-size: 11px;
+}
+.heatmap-table td {
+  padding: 0;
+}
+.heatmap-cell {
+  width: 36px;
+  height: 28px;
+  cursor: pointer;
+  border: 1px solid var(--bg);
+  transition: border-color 0.15s;
+}
+.heatmap-cell:hover { border-color: var(--accent); }
+.heatmap-cell.selected { border-color: #fff; border-width: 2px; }
+.heatmap-cell.no-data { background: var(--surface); }
+.platform-label {
+  padding: 4px 10px;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+
+.tooltip {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 100;
+  max-width: 260px;
+  line-height: 1.6;
+}
+.tooltip .metric-name { color: var(--text-muted); }
+.tooltip .metric-value { font-weight: 600; }
+
+.drilldown {
+  width: var(--panel-width);
+  min-width: var(--panel-width);
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 16px;
+  display: none;
+}
+.drilldown.open { display: block; }
+
+.drilldown h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.drilldown h3 {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin: 12px 0 4px;
+}
+
+.drilldown .close-btn {
+  float: right;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0 4px;
+}
+
+.drilldown .metrics-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin: 8px 0 12px;
+  font-size: 12px;
+}
+.drilldown .metrics-summary dt { color: var(--text-muted); }
+.drilldown .metrics-summary dd { font-weight: 600; }
+
+.chart-section {
+  margin-bottom: 16px;
+}
+.chart-section svg {
+  width: 100%;
+  background: var(--bg);
+  border-radius: 4px;
+}
+
+.drilldown .bimodal-info {
+  font-size: 12px;
+  background: var(--bg);
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px 0;
+}
