@@ -49,6 +49,12 @@ export async function fetchSignatures(
   return Object.values(data);
 }
 
+export function getTopLevelSigs(allSigs: SignatureInfo[]): SignatureInfo[] {
+  const parents = allSigs.filter((s) => !s.test);
+  if (parents.length > 0) return parents;
+  return allSigs;
+}
+
 async function fetchPerfDataBatch(
   repo: string,
   framework: number,
@@ -139,13 +145,13 @@ export async function loadDashboardData(
   onProgress?.({ done: 0, total: 1, label: "Fetching signatures..." });
   const allSigs = await fetchSignatures(repo, framework);
 
-  const parentSigs = allSigs.filter((s) => !s.test);
-  const platformSet = new Set(parentSigs.map((s) => s.machine_platform));
-  const suiteSet = new Set(parentSigs.map((s) => s.suite));
+  const topLevel = getTopLevelSigs(allSigs);
+  const platformSet = new Set(topLevel.map((s) => s.machine_platform));
+  const suiteSet = new Set(topLevel.map((s) => s.suite));
   const platforms = [...platformSet].sort();
   const suites = [...suiteSet].sort();
 
-  let sigs = parentSigs;
+  let sigs = topLevel;
   if (filterPlatforms.length > 0) {
     const pf = new Set(filterPlatforms);
     sigs = sigs.filter((s) => pf.has(s.machine_platform));

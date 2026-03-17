@@ -46,7 +46,7 @@ export function initControls(
       <select id="ctl-framework">
         <option value="13" ${s.framework === 13 ? "selected" : ""}>browsertime (13)</option>
         <option value="1" ${s.framework === 1 ? "selected" : ""}>talos (1)</option>
-        <option value="12" ${s.framework === 12 ? "selected" : ""}>awsy (12)</option>
+        <option value="15" ${s.framework === 15 ? "selected" : ""}>mozperftest (15)</option>
       </select>
     </label>
     <label>

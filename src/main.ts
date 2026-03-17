@@ -4,7 +4,7 @@ import { initControls } from "./ui/controls.js";
 import { renderHeatmap } from "./ui/heatmap.js";
 import { renderDrilldown } from "./ui/drilldown.js";
 import { updateProgress } from "./ui/progress.js";
-import { fetchSignatures, loadDashboardData } from "./api/client.js";
+import { fetchSignatures, getTopLevelSigs, loadDashboardData } from "./api/client.js";
 import type { DashboardState } from "./types.js";
 
 const initial: DashboardState = {
@@ -48,9 +48,9 @@ async function loadSignatures() {
   });
   try {
     const allSigs = await fetchSignatures(s.repo, s.framework);
-    const parentSigs = allSigs.filter((sig) => !sig.test);
-    const platforms = [...new Set(parentSigs.map((sig) => sig.machine_platform))].sort();
-    const suites = [...new Set(parentSigs.map((sig) => sig.suite))].sort();
+    const topLevel = getTopLevelSigs(allSigs);
+    const platforms = [...new Set(topLevel.map((sig) => sig.machine_platform))].sort();
+    const suites = [...new Set(topLevel.map((sig) => sig.suite))].sort();
     state.set({
       availablePlatforms: platforms,
       availableSuites: suites,
